@@ -136,16 +136,16 @@ final class VideoPlayer {
     switch (type) {
       case C.TYPE_SS:
         return new SsMediaSource.Factory(
-                new DefaultSsChunkSource.Factory(mediaDataSourceFactory,extractorsFactory),
+                new DefaultSsChunkSource.Factory(mediaDataSourceFactory),
                 new DefaultDataSource.Factory(context, mediaDataSourceFactory))
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_DASH:
         return new DashMediaSource.Factory(
-                new DefaultDashChunkSource.Factory(mediaDataSourceFactory,extractorsFactory),
+                new DefaultDashChunkSource.Factory(mediaDataSourceFactory),
                 new DefaultDataSource.Factory(context, mediaDataSourceFactory))
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_HLS:
-        return new HlsMediaSource.Factory(mediaDataSourceFactory,extractorsFactory)
+        return new HlsMediaSource.Factory(mediaDataSourceFactory)
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_OTHER:
         return new ProgressiveMediaSource.Factory(mediaDataSourceFactory,extractorsFactory)
