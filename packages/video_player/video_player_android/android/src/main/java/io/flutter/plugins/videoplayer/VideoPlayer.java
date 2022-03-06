@@ -133,7 +133,7 @@ final class VideoPlayer {
           break;
       }
     }
-    log.i("test",type);
+    Log.i("test",type);
     switch (type) {
       case C.TYPE_SS:
         return new SsMediaSource.Factory(
