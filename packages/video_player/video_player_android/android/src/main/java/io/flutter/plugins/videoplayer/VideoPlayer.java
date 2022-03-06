@@ -133,22 +133,26 @@ final class VideoPlayer {
           break;
       }
     }
-    Log.i("test",type);
+    Log.i("test",String.valueOf(type));
     switch (type) {
       case C.TYPE_SS:
+        Log.i("test","TYPE_SS");
         return new SsMediaSource.Factory(
                 new DefaultSsChunkSource.Factory(mediaDataSourceFactory),
                 new DefaultDataSource.Factory(context, mediaDataSourceFactory))
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_DASH:
+        Log.i("test","TYPE_DASH");
         return new DashMediaSource.Factory(
                 new DefaultDashChunkSource.Factory(mediaDataSourceFactory),
                 new DefaultDataSource.Factory(context, mediaDataSourceFactory))
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_HLS:
+        Log.i("test","TYPE_HLS");
         return new HlsMediaSource.Factory(mediaDataSourceFactory)
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_OTHER:
+        Log.i("test","TYPE_OTHER");
         return new ProgressiveMediaSource.Factory(mediaDataSourceFactory,extractorsFactory)
             .createMediaSource(MediaItem.fromUri(uri));
       default:
