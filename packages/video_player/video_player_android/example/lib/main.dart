@@ -59,12 +59,15 @@ class _ButterFlyAssetVideoState extends State<_ButterFlyAssetVideo> {
   @override
   void initState() {
     super.initState();
-    _controller = MiniController.asset('assets/Butterfly-209.mp4');
+    _controller = MiniController.asset('Butterfly-209.mp4');
 
     _controller.addListener(() {
       setState(() {});
     });
-    _controller.initialize().then((_) => setState(() {}));
+    _controller.initialize().then((_) => setState(() {
+          print('Duration is ${_controller.value.duration}');
+        }));
+
     _controller.play();
   }
 

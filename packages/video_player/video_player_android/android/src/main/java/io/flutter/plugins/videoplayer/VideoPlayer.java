@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.util.Util;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.view.TextureRegistry;
@@ -75,7 +76,6 @@ final class VideoPlayer {
     exoPlayer = new ExoPlayer.Builder(context).build();
 
     Uri uri = Uri.parse(dataSource);
-
     DataSource.Factory dataSourceFactory;
     if (isHTTP(uri)) {
       DefaultHttpDataSource.Factory httpDataSourceFactory =
@@ -107,7 +107,9 @@ final class VideoPlayer {
   }
 
   private MediaSource buildMediaSource(
-      Uri uri, DataSource.Factory mediaDataSourceFactory, String formatHint, Context context) {
+      Uri uri, DataSource.Factory mediaDataSourceFactory, String formatHint, Context context ) {
+    DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory().setConstantBitrateSeekingEnabled(true);
+
     int type;
     if (formatHint == null) {
       type = Util.inferContentType(uri.getLastPathSegment());
@@ -130,28 +132,30 @@ final class VideoPlayer {
           break;
       }
     }
+
     switch (type) {
       case C.TYPE_SS:
         return new SsMediaSource.Factory(
-                new DefaultSsChunkSource.Factory(mediaDataSourceFactory),
+                new DefaultSsChunkSource.Factory(mediaDataSourceFactory,extractorsFactory),
                 new DefaultDataSource.Factory(context, mediaDataSourceFactory))
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_DASH:
         return new DashMediaSource.Factory(
-                new DefaultDashChunkSource.Factory(mediaDataSourceFactory),
+                new DefaultDashChunkSource.Factory(mediaDataSourceFactory,extractorsFactory),
                 new DefaultDataSource.Factory(context, mediaDataSourceFactory))
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_HLS:
-        return new HlsMediaSource.Factory(mediaDataSourceFactory)
+        return new HlsMediaSource.Factory(mediaDataSourceFactory,extractorsFactory)
             .createMediaSource(MediaItem.fromUri(uri));
       case C.TYPE_OTHER:
-        return new ProgressiveMediaSource.Factory(mediaDataSourceFactory)
+        return new ProgressiveMediaSource.Factory(mediaDataSourceFactory,extractorsFactory)
             .createMediaSource(MediaItem.fromUri(uri));
       default:
         {
           throw new IllegalStateException("Unsupported type: " + type);
         }
     }
+
   }
 
   private void setupVideoPlayer(
