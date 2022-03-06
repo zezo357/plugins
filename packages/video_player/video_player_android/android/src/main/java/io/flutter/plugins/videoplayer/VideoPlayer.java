@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.util.Log;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.view.TextureRegistry;
 import java.util.Arrays;
@@ -132,7 +133,7 @@ final class VideoPlayer {
           break;
       }
     }
-
+    log.i("test",type);
     switch (type) {
       case C.TYPE_SS:
         return new SsMediaSource.Factory(
